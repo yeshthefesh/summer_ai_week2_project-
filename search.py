@@ -31,7 +31,7 @@ class SearchProblem:
         """
         Returns the start state for the search problem.
         """
-        util.raiseNotDefined()
+        util.raiseNotDefined()  
 
     def isGoalState(self, state):
         """
@@ -82,17 +82,32 @@ def general_search(problem: SearchProblem,frontier1):
     goal_found = False
 
     while not goal_found:
-        node = frontier.pop()
+        print(frontier.list)
+        fullnode = frontier.pop()
+        if len(fullnode) > 1: 
+            node = fullnode[0]
+            current_solution = fullnode[1]
+        else:
+            node = fullnode
+        print("full:", fullnode)
+        print("node:",node)
 
         if problem.isGoalState(node[0]):
             return current_solution
         else:
-            if len(node) > 1:
-                current_solution.append(node[1]) # add the direction followed to current_solution (unless it's the starting state)
-            visited.append(current_solution) # add current_solution to the visited directions
+            visited.append(node[0]) # add current_solution to the visited directions
             for successor in problem.getSuccessors(node[0]): 
-                if successor not in visited or successor not in frontier:
-                    frontier.push(current_solution.copy().append(successor[1])) # unseen successor paths get added
+                successorpath = current_solution.copy()
+                successorpath.append(successor[1])
+
+                successor_frontier = []
+                for item in frontier.list:
+                    successor_frontier.append(item[0])
+                if not(successor[0] in visited or successor in successor_frontier):
+                    successor_and_path = []
+                    successor_and_path.append(successor)
+                    successor_and_path.append(successorpath)
+                    frontier.push(successor_and_path) # unseen successor paths get added
     return current_solution
 
 def depthFirstSearch(problem: SearchProblem):
@@ -118,8 +133,8 @@ def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     pass
-    # frontier = util.Queue()
-    # return(general_search(problem, frontier))
+    frontier = util.Queue()
+    return(general_search(problem, frontier))
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
