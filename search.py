@@ -82,15 +82,12 @@ def general_search(problem: SearchProblem,frontier1):
     goal_found = False
 
     while not goal_found:
-        print(frontier.list)
         fullnode = frontier.pop()
         if len(fullnode) > 1: 
             node = fullnode[0]
             current_solution = fullnode[1]
         else:
             node = fullnode
-        print("full:", fullnode)
-        print("node:",node)
 
         if problem.isGoalState(node[0]):
             return current_solution
